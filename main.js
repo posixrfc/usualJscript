@@ -1,19 +1,7 @@
-if(!self.user){
-	self.user={debug:location.hostname.startsWith("127.0.") || location.hostname.startsWith("192.168.") || location.hostname.startsWith("localhost") || location.hostname.startsWith("172.") || location.hostname.startsWith("10.")};
-	if(localStorage.getItem("in")){
-		if(Number.parseInt(localStorage.getItem("until"))>new Date().getTime()){
-			user.token=self.localStorage.getItem("token");
-		}else{
-			user.token=null;
-			self.localStorage.removeItem("in");
-			self.localStorage.removeItem("name");
-			self.localStorage.removeItem("pass");
-			self.localStorage.removeItem("until");
-			self.localStorage.removeItem("token");
-		}
-	}
-	self._=self.user;
+if(!self._){
+	self._={debug:location.hostname.startsWith("127.0.") || location.hostname.startsWith("192.168.") || location.hostname.startsWith("localhost") || location.hostname.startsWith("172.") || location.hostname.startsWith("10.")};
 }
+_.debug=true;
 document.addEventListener("DOMContentLoaded",()=>{
 	let screeny=document.documentElement.clientHeight;
 	document.body.style.minHeight=screeny+"px";
@@ -34,7 +22,7 @@ _.hreq=(method,path,data,header,succ,fail)=>{
 			fail(req.responseText)
 		}
 	};
-	let mimeType="application/json",noMimeType=true;
+	let mimeType="application/x-www-form-urlencoded",noMimeType=true;
 	if(header){
 		for(head in header){
 			if("Content-Type"===head){
@@ -130,7 +118,7 @@ _.hreq=(method,path,data,header,succ,fail)=>{
 				dataEncoded=data;
 		}
 	}
-	let url=location.protocol+"//"+location.host+"/api/";
+	let url=location.protocol+"//"+location.host+"/";
 	if("GET"===method){
 		if(dataEncoded){
 			req.open(method,url+path+"?"+dataEncoded,true);
@@ -147,9 +135,6 @@ _.hreq=(method,path,data,header,succ,fail)=>{
 	}
 	if(noMimeType){
 		req.setRequestHeader("Content-Type",mimeType);
-	}
-	if(user.token){
-		req.setRequestHeader("Authorization",'Bearer '+user.token);
 	}
 	if("GET"===method){
 		req.send();
