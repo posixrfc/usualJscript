@@ -118,15 +118,14 @@ _.hreq=(method,path,data,header,succ,fail)=>{
 				dataEncoded=data;
 		}
 	}
-	let url=location.protocol+"//"+location.host+"/";
 	if("GET"===method){
 		if(dataEncoded){
-			req.open(method,url+path+"?"+dataEncoded,true);
+			req.open(method,path+"?"+dataEncoded,true);
 		}else{
-			req.open(method,url+path,true);
+			req.open(method,path,true);
 		}
 	}else{
-		req.open(method,url+path,true);
+		req.open(method,path,true);
 	}
 	if(header){
 		for(head in header){
