@@ -1,7 +1,6 @@
 if(!self._){
 	self._={debug:location.hostname.startsWith("127.0.") || location.hostname.startsWith("192.168.") || location.hostname.startsWith("localhost") || location.hostname.startsWith("172.") || location.hostname.startsWith("10.")};
-}
-_.debug=true;
+}//_.debug=true;
 document.addEventListener("DOMContentLoaded",()=>{
 	let screeny=document.documentElement.clientHeight;
 	document.body.style.minHeight=screeny+"px";
@@ -14,12 +13,12 @@ _.hreq=(method,path,data,header,succ,fail)=>{
 		}
 		if(200===req.status){
 			if("function"===typeof succ){
-				succ(req.responseText);
+				succ(req.responseText,req.getAllResponseHeaders());
 			}
 			return;
 		}
 		if("function"===typeof fail){
-			fail(req.responseText)
+			fail(req.responseText,req.getAllResponseHeaders());
 		}
 	};
 	let mimeType="application/x-www-form-urlencoded",noMimeType=true;

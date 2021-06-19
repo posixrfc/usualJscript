@@ -22,7 +22,7 @@ input[type="button"]{
 button::after{
   border:none;
 }
-:root{
+html{
 	font-size:18px;
 	background-color:white;
 }
