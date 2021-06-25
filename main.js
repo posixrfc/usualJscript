@@ -13,12 +13,12 @@ _.hreq=(method,path,data,header,succ,fail)=>{
 		}
 		if(200===req.status){
 			if("function"===typeof succ){
-				succ(req.responseText,req.getAllResponseHeaders());
+				succ(req.responseText,req);
 			}
 			return;
 		}
 		if("function"===typeof fail){
-			fail(req.responseText,req.getAllResponseHeaders());
+			fail(req.responseText,req);
 		}
 	};
 	let mimeType="application/x-www-form-urlencoded",noMimeType=true;
