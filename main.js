@@ -386,9 +386,14 @@ _.init=fn=>{document.addEventListener("DOMContentLoaded",fn);};
 _.load=fn=>{self.addEventListener("load",fn);};
 _.crt=p=>{return document.createElement(p);};
 _.css=(p)=>{return document.querySelectorAll(p);};
-_.retainTemporary=(key,val)=>{self.sessionStorage.setItem(key,val);};
-_.obtainTemporary=key=>{return self.sessionStorage.getItem(key);};
-_.deleteTemporary=key=>{self.sessionStorage.removeItem(key);};
-_.retainPermanent=(key,val)=>{self.localStorage.setItem(key,val);};
-_.obtainPermanent=key=>{return self.localStorage.getItem(key);};
-_.deletePermanent=key=>{self.localStorage.removeItem(key);};
+_.add=(p,s)=>{p.appendChild(s);};
+_.del=(p,s)=>{p.removeChild(s);};
+_.attr=(e,k,v)=>{
+	if(v){
+		return e.setAttribute(k,v);
+	}
+	if(null===v){
+		return e.removeAttribute(k);
+	}
+	return e.getAttribute(k);
+};
