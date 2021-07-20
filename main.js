@@ -253,7 +253,7 @@ _.xml2obj=(obj,val)=>{
 	}
 	return val ? _.xml2obj(obj,val) : true;
 };
-_.showTip=(val,ms=1234)=>{
+_.showTip=(val,ms=666)=>{
 	let screenx=document.documentElement.clientWidth,tipx=320,screeny=document.documentElement.clientHeight,tipy=45;
 	let blur=document.createElement("aside"),tiper=document.createElement("span"),wrper=document.createElement("nav");
 	document.body.appendChild(blur);
@@ -302,7 +302,7 @@ _.showLoading=(val)=>{
 	wrper.style.left=(screenx-tipx)/2+"px";
 	return ()=>{wrper.innerHTML=null;document.body.removeChild(wrper);document.body.removeChild(blur);};
 };
-_.showConfirm=(val,okfn,nofn,lines=1)=>{
+_.showConfirm=(val,okfn,nofn,oktxt,notxt,lines=1)=>{
 	//val="截至1月5日24时，据31个省（自治区、直辖市）和新疆生产建设兵团报告，现有确诊病例443例（其中重症病例14例），累计治愈出院病例82138例，累计死亡病例4634例，累计报告确诊病例87215例，现有疑似病例3例。累计追踪到密切接触者912596人，尚在医学观察的密切接触者17736人";
 	//val="如果您需要创建包含文本的新段落，请记得添加到段落的文本的文本节点，然后向文档添加该段落";
 	//val="如果您需要创建包含文本的新段落，请记得添加到段落的文本的文本节点";
@@ -329,7 +329,8 @@ _.showConfirm=(val,okfn,nofn,lines=1)=>{
 	
 	okele=wrper.appendChild(document.createElement("button"));
 	noele=wrper.appendChild(document.createElement("button"));
-	okele.innerText="确  定",noele.innerText="取  消";
+	okele.innerText=oktxt||"确  定";
+	noele.innerText=notxt||"取  消";
 	okele.onclick=noele.onclick=function(){
 		if(okele===this && "function"===typeof okfn){
 			okfn(this);
@@ -396,4 +397,7 @@ _.attr=(e,k,v)=>{
 		return e.removeAttribute(k);
 	}
 	return e.getAttribute(k);
+};
+_.str=val=>{
+	return val?val:"";
 };
