@@ -12,8 +12,14 @@ _.hreq=(method,path,data,header,succ,fail)=>{
 			return;
 		}
 		if(200===req.status){
+			let ret=req.responseText;
+			if("function"===typeof _.prepare){
+				if(!(ret=_.prepare(ret,req))){
+					return;
+				}
+			}
 			if("function"===typeof succ){
-				succ(req.responseText,req);
+				succ(ret,req);
 			}
 			return;
 		}
@@ -253,30 +259,26 @@ _.xml2obj=(obj,val)=>{
 	}
 	return val ? _.xml2obj(obj,val) : true;
 };
-_.showTip=(val,ms=666)=>{
-	let screenx=document.documentElement.clientWidth,tipx=320,screeny=document.documentElement.clientHeight,tipy=45;
-	let blur=document.createElement("aside"),tiper=document.createElement("span"),wrper=document.createElement("nav");
-	document.body.appendChild(blur);
+_.showTip=(val,ms=456)=>{
+	let screenx=document.documentElement.clientWidth,tipy=45;
+	let tiper=_.crt("span"),wrper=_.crt("nav");
 	document.body.appendChild(wrper);
 	wrper.appendChild(tiper);
-	blur.style.position=wrper.style.position="fixed";
-	blur.style.zIndex=wrper.style.zIndex="2";
+	wrper.style.position="fixed";
+	wrper.style.zIndex="2";
 	tiper.style.color="white";
 	tiper.style.display="inline-block";
-	blur.style.backgroundColor="rgba(0,0,0,0.5)";
 	wrper.style.backgroundColor="transparent";
-	tiper.style.backgroundColor="#111111";
+	tiper.style.backgroundColor="#222222";
 	tiper.innerText=val;
-	self.setTimeout(()=>{wrper.removeChild(tiper);document.body.removeChild(wrper);document.body.removeChild(blur);},ms);
-	blur.style.width=wrper.style.width=screenx+"px";
-	blur.style.height=screeny+"px";
-	blur.style.top=blur.style.left=wrper.style.left="0px";
+	self.setTimeout(()=>{wrper.removeChild(tiper);document.body.removeChild(wrper);},ms);
+	wrper.style.width=screenx+"px";
+	wrper.style.left="0px";
 	wrper.style.height=tipy+"px";
 	tiper.style.height=tiper.style.lineHeight=wrper.style.height;
 	wrper.style.textAlign=tiper.style.textAlign="center";
-	tiper.style.borderRadius=tipy/2+"px";
-	wrper.style.top=(screeny-tipy)/2+"px";
-	//tiper.style.left=(screenx-tipx)/2+"px";
+	tiper.style.borderRadius=tipy/5+"px";
+	wrper.style.top=(document.documentElement.clientHeight-tipy)/2+"px";
 	tiper.style.margin="0px auto";
 	tiper.style.padding="0px 1.2rem";
 };
@@ -302,14 +304,11 @@ _.showLoading=(val)=>{
 	wrper.style.left=(screenx-tipx)/2+"px";
 	return ()=>{wrper.innerHTML=null;document.body.removeChild(wrper);document.body.removeChild(blur);};
 };
-_.showConfirm=(val,okfn,nofn,oktxt,notxt,lines=1)=>{
-	//val="截至1月5日24时，据31个省（自治区、直辖市）和新疆生产建设兵团报告，现有确诊病例443例（其中重症病例14例），累计治愈出院病例82138例，累计死亡病例4634例，累计报告确诊病例87215例，现有疑似病例3例。累计追踪到密切接触者912596人，尚在医学观察的密切接触者17736人";
-	//val="如果您需要创建包含文本的新段落，请记得添加到段落的文本的文本节点，然后向文档添加该段落";
-	//val="如果您需要创建包含文本的新段落，请记得添加到段落的文本的文本节点";
+_.showConfirm=(tip,cnt,okfn,nofn,oktxt,notxt)=>{
 	let screenx=document.documentElement.clientWidth,screeny=document.documentElement.clientHeight;
-	let blur=document.body.appendChild(document.createElement("aside")),tipx=320;
-	let wrper=document.body.appendChild(document.createElement("nav")),tipy=99;
-	wrper.innerHTML='<span style="position:static;display:inline-block;text-align:center;color:black;width:100%;font-weight:bold;font-size:0.9rem;">'+val+'</span>';
+	let blur=document.body.appendChild(_.crt("aside")),tipx=screenx*0.8;
+	let wrper=document.body.appendChild(_.crt("nav")),tipy=screenx*0.6;
+	wrper.innerHTML='<span style="position:absolute;display:block;text-align:center;color:black;width:100%;font-weight:bold;font-size:0.9rem;left:0px;top:0px;height:2.5rem;line-height:2.5rem;border-bottom:1px solid #d3d3d3;">'+tip+'</span>';
 	
 	blur.style.position=wrper.style.position="fixed";
 	blur.style.zIndex=wrper.style.zIndex="2";
@@ -318,19 +317,23 @@ _.showConfirm=(val,okfn,nofn,oktxt,notxt,lines=1)=>{
 	blur.style.width=screenx+"px";
 	wrper.style.width=tipx+"px";
 	wrper.style.boxSizing="border-box";
-	wrper.style.padding="1rem";
+	wrper.style.padding="0px 1rem";
 	blur.style.height=screeny+"px";
-	wrper.style.height=tipy+lines*20+"px";
+	wrper.style.height=tipy+"px";
 	blur.style.top=blur.style.left="0px";
 	wrper.style.textAlign="center";
 	wrper.style.borderRadius="9px";
 	wrper.style.top=(screeny-tipy)/2+"px";
 	wrper.style.left=(screenx-tipx)/2+"px";
 	
-	okele=wrper.appendChild(document.createElement("button"));
-	noele=wrper.appendChild(document.createElement("button"));
-	okele.innerText=oktxt||"确  定";
-	noele.innerText=notxt||"取  消";
+	wrper.innerHTML+='<div style="display:block;box-sizing:border-box;text-align:center;width:100%;">'+cnt+'</div>';
+	let hwrp=Number.parseInt(getComputedStyle(wrper).height),ocnt=wrper.firstElementChild.nextElementSibling;
+	let hcnt=Number.parseInt(getComputedStyle(ocnt).height);
+	ocnt.style.marginTop=(hwrp-hcnt)/2+"px";
+	
+	let okele=wrper.appendChild(_.crt("button")),noele=wrper.appendChild(_.crt("button"));
+	okele.innerText=oktxt||"确 定";
+	noele.innerText=notxt||"取 消";
 	okele.onclick=noele.onclick=function(){
 		if(okele===this && "function"===typeof okfn){
 			okfn(this);
@@ -343,19 +346,20 @@ _.showConfirm=(val,okfn,nofn,oktxt,notxt,lines=1)=>{
 		document.body.removeChild(wrper);
 		document.body.removeChild(blur);
 	};
-	okele.style.backgroundColor=noele.style.backgroundColor="#abcdef";
+	okele.style.backgroundColor=noele.style.backgroundColor="transparent";
 	okele.style.color=noele.style.color="blue";
 	okele.style.display=noele.style.display="inline-block";
-	okele.style.width=noele.style.width="3.2rem";
-	okele.style.height=noele.style.height="1.9rem";
-	okele.style.borderRadius=noele.style.borderRadius="0.2rem";
+	okele.style.width=noele.style.width="50%";
+	okele.style.height=noele.style.height="2.5rem";
 	okele.style.lineHeight=noele.style.lineHeight="1.7rem";
 	okele.style.textAlign=noele.style.textAlign="center";
-	okele.style.border=noele.style.border="1px solid lightgray";
 	okele.style.position=noele.style.position="absolute";
-	okele.style.bottom=noele.style.bottom="1rem";
-	okele.style.left=noele.style.right="3rem";
+	okele.style.bottom=noele.style.bottom="0px";
+	okele.style.left=noele.style.right="0px";
 	okele.style.fontWeight=noele.style.fontWeight="bold";
+	okele.style.cursor=noele.style.cursor="pointer";
+	noele.style.borderLeft="1px solid #8a8a8a";
+	okele.style.borderTop=noele.style.borderTop="1px solid #d3d3d3";
 };
 _.showPage=pid=>{
 	let retValue=null;
@@ -369,10 +373,10 @@ _.showPage=pid=>{
 	}
 	return retValue;
 };
-_.execScript=(url,sync=true)=>{
-	let exe=document.createElement("script");
+_.exec=(url,sync=true)=>{
+	let exe=_.crt("script");
 	exe.type="text/javascript";
-	exe["char"+"set"]="utf-8";
+	exe.charset="utf-8";
 	if(url){
 		exe.src=url;
 	}
@@ -387,8 +391,14 @@ _.init=fn=>{document.addEventListener("DOMContentLoaded",fn);};
 _.load=fn=>{self.addEventListener("load",fn);};
 _.crt=p=>{return document.createElement(p);};
 _.css=(p)=>{return document.querySelectorAll(p);};
-_.add=(p,s)=>{p.appendChild(s);};
-_.del=(p,s)=>{p.removeChild(s);};
+_.add=(p,s)=>{
+	p.appendChild(s);
+	return p;
+};
+_.del=(p,s)=>{
+	p.removeChild(s);
+	return p;
+};
 _.attr=(e,k,v)=>{
 	if(v){
 		return e.setAttribute(k,v);
