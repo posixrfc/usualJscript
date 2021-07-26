@@ -1,6 +1,6 @@
 if(!self._){
-	self._={debug:location.hostname.startsWith("127.0.") || location.hostname.startsWith("192.168.") || location.hostname.startsWith("localhost") || location.hostname.startsWith("172.") || location.hostname.startsWith("10.")};
-}//_.debug=true;
+	self._={debug:location.hostname.startsWith("127") || location.hostname.startsWith("192.168") || location.hostname.startsWith("localhost") || location.hostname.startsWith("172") || location.hostname.startsWith("10.")};
+}
 document.addEventListener("DOMContentLoaded",()=>{
 	let screeny=document.documentElement.clientHeight;
 	document.body.style.minHeight=screeny+"px";
@@ -14,9 +14,7 @@ _.hreq=(method,path,data,header,succ,fail)=>{
 		if(200===req.status){
 			let ret=req.responseText;
 			if("function"===typeof _.prepare){
-				if(!(ret=_.prepare(ret,req))){
-					return;
-				}
+				ret=_.prepare(ret,req);
 			}
 			if("function"===typeof succ){
 				succ(ret,req);
