@@ -14,7 +14,7 @@
 	text-decoration:none;
 	z-index:0;
 }
-input[type="button"]{
+input[type="button"],input[type="date"],select{
 	-webkit-appearance:none;
 	-moz-appearance:none;
 	appearance:none;
