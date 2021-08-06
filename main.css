@@ -52,9 +52,10 @@ html{
 	text-align:center;
 }
 .hide{
-	display:none;
-	width:0;
-	height:0;
-	overflow:hidden;
-	background-color:transparent;
+	position:fixed !important;
+	display:none !important;
+	width:0px !important;
+	height:0px !important;
+	overflow:hidden !important;
+	background-color:transparent !important;
 }
