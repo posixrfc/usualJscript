@@ -285,7 +285,7 @@ _.showLoading=(val)=>{
 	let blur=document.createElement("aside"),wrper=document.createElement("nav"),tipx=130,tipy=130;
 	document.body.appendChild(blur);
 	document.body.appendChild(wrper);
-	let tmpHTML='<img style="position:static;display:block;width:4rem;height:4rem;margin:0.7rem auto 0.1rem;background-color:transparent;" src="loading.gif"/>';
+	let tmpHTML='<img style="position:static;display:block;width:4rem;height:4rem;margin:0.7rem auto 0.1rem;background-color:transparent;" src="'+_.loadurl+'"/>';
 	tmpHTML+='<span style="position:static;display:inline-block;text-align:center;color:black;width:100%;height:2rem;font-size:0.9rem;">'+val+'</span>';
 	wrper.innerHTML=tmpHTML;
 	blur.style.position=wrper.style.position="fixed";
