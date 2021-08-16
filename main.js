@@ -324,7 +324,7 @@ _.showConfirm=(tip,cnt,okfn,nofn,oktxt,notxt)=>{
 	wrper.style.top=(screeny-tipy)/2+"px";
 	wrper.style.left=(screenx-tipx)/2+"px";
 	
-	wrper.innerHTML+='<div style="display:block;box-sizing:border-box;text-align:center;width:100%;">'+cnt+'</div>';
+	wrper.innerHTML+='<div style="display:block;box-sizing:border-box;text-align:center;width:100%;word-wrap:break-word;word-break:break-all;white-space:normal;">'+cnt+'</div>';
 	let hwrp=Number.parseInt(getComputedStyle(wrper).height),ocnt=wrper.firstElementChild.nextElementSibling;
 	let hcnt=Number.parseInt(getComputedStyle(ocnt).height);
 	ocnt.style.marginTop=(hwrp-hcnt)/2+"px";
