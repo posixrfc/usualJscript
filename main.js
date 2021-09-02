@@ -138,6 +138,7 @@ _.hreq=(method,path,data,header,succ,fail)=>{
 	if(noMimeType){
 		req.setRequestHeader("Content-Type",mimeType);
 	}
+	req.withCredentials=true;
 	if("GET"===method){
 		req.send();
 	}else{
