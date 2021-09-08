@@ -1,6 +1,4 @@
-if(!self._){
-	self._={debug:location.hostname.startsWith("127") || location.hostname.startsWith("192.168") || location.hostname.startsWith("localhost") || location.hostname.startsWith("172") || location.hostname.startsWith("10.")};
-}
+self._=self._||{};
 document.addEventListener("DOMContentLoaded",()=>{
 	let screeny=document.documentElement.clientHeight;
 	document.body.style.minHeight=screeny+"px";
