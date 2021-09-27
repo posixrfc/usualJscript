@@ -279,12 +279,24 @@ _.showTip=(val,ms=456)=>{
 	tiper.style.margin="0px auto";
 	tiper.style.padding="0px 1.2rem";
 };
+_.calcLoadUrl=()=>{
+	if(_.loadurl){
+		return _.loadurl;
+	}
+	for(let s of document.scripts){
+		if(s.src && s.src.endsWith("/main.js")){
+			_.loadurl=s.src;
+			break;
+		}
+	}
+	return _.loadurl=_.loadurl.substring(0,_.loadurl.length-7)+"loading.gif";
+};
 _.showLoading=(val)=>{
 	let screenx=document.documentElement.clientWidth,screeny=document.documentElement.clientHeight;
 	let blur=document.createElement("aside"),wrper=document.createElement("nav"),tipx=130,tipy=130;
 	document.body.appendChild(blur);
 	document.body.appendChild(wrper);
-	let tmpHTML='<img style="position:static;display:block;width:4rem;height:4rem;margin:0.7rem auto 0.1rem;background-color:transparent;" src="'+_.loadurl+'"/>';
+	let tmpHTML='<img style="position:static;display:block;width:4rem;height:4rem;margin:0.7rem auto 0.1rem;background-color:transparent;" src="'+_.calcLoadUrl()+'"/>';
 	tmpHTML+='<span style="position:static;display:inline-block;text-align:center;color:black;width:100%;height:2rem;font-size:0.9rem;">'+val+'</span>';
 	wrper.innerHTML=tmpHTML;
 	blur.style.position=wrper.style.position="fixed";
